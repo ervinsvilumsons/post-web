@@ -7,4 +7,3 @@ services:
       - /app/node_modules
     ports:
       - "9002:80"
-    command: npm run serve

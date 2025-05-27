@@ -1,5 +1,8 @@
 FROM node:18 AS build-stage
 
+RUN apt-get update && \
+    apt-get install -y nodejs npm
+
 WORKDIR /app
 
 COPY package*.json ./
@@ -17,4 +20,4 @@ COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 EXPOSE 80
 
-CMD ["npm", "run", "serve"]
+CMD ["nginx", "-g", "daemon off;"]
