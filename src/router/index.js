@@ -2,40 +2,40 @@ import { createRouter, createWebHistory } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 
 import AuthPage from '@/pages/AuthPage.vue'
-import PostShowPage from '@/pages/Post/PostShowPage.vue'
-import PostIndexPage from '@/pages/Post/PostIndexPage.vue'
-import PostEditorPage from '@/pages/Post/PostEditorPage.vue'
+import { default as ShowPost } from '@/pages/Post/ShowPage.vue'
+import { default as ShowPosts } from '@/pages/Post/IndexPage.vue'
+import { default as PostEditor } from '@/pages/Post/EditorPage.vue'
 
 const routes = [
   {
     path: '/',
     name: 'Index',
-    component: PostIndexPage,
+    component: ShowPosts,
     meta: { layout: 'auth' },
   },
   {
     path: '/user',
     name: 'User',
-    component: PostIndexPage,
+    component: ShowPosts,
     meta: { layout: 'auth' },
   },
   {
     path: '/posts/:id',
     name: 'Post',
-    component: PostShowPage,
+    component: ShowPost,
     meta: { layout: 'auth' },
     props: true,
   },
     {
     path: '/posts/create',
     name: 'CreatePost',
-    component: PostEditorPage,
+    component: PostEditor,
     meta: { layout: 'auth' },
   },
     {
     path: '/posts/edit/:id',
     name: 'EditPost',
-    component: PostEditorPage,
+    component: PostEditor,
     meta: { layout: 'auth' },
     props: true,
   },
