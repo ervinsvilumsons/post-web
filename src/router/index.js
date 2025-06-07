@@ -1,51 +1,55 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { useAuthStore } from '../stores/auth'
+import { useAuthStore } from '@/stores/auth'
 
-import IndexPage from '@/pages/IndexPage.vue'
-import UserPage from '@/pages/UserPage.vue'
-import PostPage from '@/pages/PostPage.vue'
-import CreatePostPage from '@/pages/CreatePostPage.vue'
-import EditPostPage from '@/pages/EditPostPage.vue'
-import LoginPage from '@/pages/LoginPage.vue'
-import RegisterPage from '@/pages/RegisterPage.vue'
+import AuthPage from '@/pages/AuthPage.vue'
+import PostShowPage from '@/pages/Post/PostShowPage.vue'
+import PostIndexPage from '@/pages/Post/PostIndexPage.vue'
+import PostEditorPage from '@/pages/Post/PostEditorPage.vue'
 
 const routes = [
   {
     path: '/',
     name: 'Index',
-    component: IndexPage
-  },
-  {
-    path: '/posts/:id',
-    name: 'Post',
-    component: PostPage,
-    props: true
-  },
-    {
-    path: '/posts/create',
-    name: 'CreatePost',
-    component: CreatePostPage,
-  },
-    {
-    path: '/posts/edit/:id',
-    name: 'EditPost',
-    component: EditPostPage,
-    props: true
+    component: PostIndexPage,
+    meta: { layout: 'auth' },
   },
   {
     path: '/user',
     name: 'User',
-    component: UserPage
+    component: PostIndexPage,
+    meta: { layout: 'auth' },
+  },
+  {
+    path: '/posts/:id',
+    name: 'Post',
+    component: PostShowPage,
+    meta: { layout: 'auth' },
+    props: true,
+  },
+    {
+    path: '/posts/create',
+    name: 'CreatePost',
+    component: PostEditorPage,
+    meta: { layout: 'auth' },
+  },
+    {
+    path: '/posts/edit/:id',
+    name: 'EditPost',
+    component: PostEditorPage,
+    meta: { layout: 'auth' },
+    props: true,
   },
   {
     path: '/login',
     name: 'Login',
-    component: LoginPage
+    component: AuthPage,
+    meta: { layout: 'guest' },
   },
   {
     path: '/register',
     name: 'Register',
-    component: RegisterPage
+    component: AuthPage,
+    meta: { layout: 'guest' },
   }
 ]
 
@@ -57,13 +61,10 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const auth = useAuthStore()
 
-  const publicPages = ['/login', '/register']
-  const authRequired = !publicPages.includes(to.path)
-
-  if (authRequired && !auth.isAuthenticated) {
-    next('/login')
-  } else if ((to.path === '/login' || to.path === '/register') && auth.isAuthenticated) {
-    next('/')
+  if (to.meta.layout === 'auth' && !auth.isAuthenticated) {
+    next({ name: 'Login' })
+  } else if (to.meta.layout === 'guest' && auth.isAuthenticated) {
+    next({ name: 'Index' })
   } else {
     next()
   }
