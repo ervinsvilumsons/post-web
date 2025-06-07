@@ -1,21 +1,11 @@
 # post-web
 
-## Project setup with Docker
+## Project setup
 ```
 git clone https://github.com/ervinsvilumsons/post-web.git
 docker-compose up -d --build
-
-http://localhost:9002
 ```
-
-## Project setup without Docker
-```
-git clone https://github.com/ervinsvilumsons/post-web.git
-npm install
-npm run serve
-
-http://localhost:8080
-```
+See [http://localhost:9002](http://localhost:9002)
 
 ### Lints and fixes files
 ```
