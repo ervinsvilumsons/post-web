@@ -10,6 +10,11 @@ docker-compose up -d --build
 ```
 See [http://localhost:9002](http://localhost:9002)
 
+## Tests
+```
+npx cypress open
+```
+
 ### Lints and fixes files
 ```
 npm run lint
