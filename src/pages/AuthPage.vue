@@ -39,7 +39,7 @@
             <div v-if="!isLogin">
                 <label for="password_confirmation" class="block mb-1 font-medium">{{ $t('password_confirmation') }}</label>
                 <input
-                    id="password_confirmation"
+                    id="passwordConfirmation"
                     type="password"
                     v-model="form.password_confirmation"
                     required

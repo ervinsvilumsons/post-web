@@ -16,10 +16,29 @@
         {{ category }}
       </span>
     </div>
-    <router-link class="text-blue-600 hover:underline" :to="{ name: 'Post', params: { id: props.post.id } }">{{ $t('read_more') }}</router-link>
+    <router-link 
+      id="readPost"
+      class="text-blue-600 hover:underline" 
+      :to="{ name: 'Post', params: { id: props.post.id } }"
+    >
+      {{ $t('read_more') }}
+    </router-link>
     <div v-if="props.post.user_id === user.id">
-      <router-link class="ml-4 text-blue-600 hover:text-blue-800 text-xs" :to="{ name: 'EditPost', params: { id: props.post.id } }">{{ $t('edit') }}</router-link>
-      <button @click="removePost(post.id)" class="ml-4 text-red-600 hover:text-red-800 text-xs cursor-pointer" :title="$t('delete')">{{ $t('delete') }}</button>
+      <router-link 
+        id="editPost"
+        class="ml-4 text-blue-600 hover:text-blue-800 text-xs" 
+        :to="{ name: 'EditPost', params: { id: props.post.id } }"
+      >
+        {{ $t('edit') }}
+      </router-link>
+      <button 
+        id="deletePost" 
+        class="ml-4 text-red-600 hover:text-red-800 text-xs cursor-pointer" 
+        @click="removePost(post.id)"
+        :title="$t('delete')"
+      >
+        {{ $t('delete') }}
+      </button>
     </div>
   </div>
 </template>

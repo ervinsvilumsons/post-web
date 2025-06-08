@@ -1,11 +1,13 @@
 <template>
-  <div>
-    <div class="max-w-3xl mx-auto p-4">
+  <div class="max-w-3xl mx-auto p-4">
+    <div v-if="!loading && (isCreate || post !== null)">
       <h1 class="text-2xl font-bold mb-4">{{ isCreate ? $t('create_post') : $t('edit_post') }}</h1>
-      <form @submit.prevent="submit" class="space-y-4">
+      <form 
+        @submit.prevent="submit" class="space-y-4">
         <div>
           <label class="block mb-1 font-semibold">{{ $t('title') }}</label>
           <input
+            id="title"
             v-model="title"
             type="text"
             class="w-full border rounded px-3 py-2"
@@ -16,6 +18,7 @@
         <div>
           <label class="block mb-1 font-semibold">{{ $t('content') }}</label>
           <textarea
+            id="content"
             v-model="content"
             rows="6"
             class="w-full border rounded px-3 py-2"
@@ -44,12 +47,15 @@
         <div v-if="error" class="text-red-600">{{ error }}</div>
         <button
           type="submit"
-          :disabled="loading"
+          :disabled="submitting"
           class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 disabled:opacity-50"
         >
-          {{ isCreate ? (loading ? $t('creating') : $t('create')) : (loading ? $t('submitting') : $t('submit')) }}
+          {{ isCreate ? (submitting ? $t('creating') : $t('create')) : (submitting ? $t('submitting') : $t('submit')) }}
         </button>
       </form>
+    </div>
+    <div v-else class="p-4">
+      <h3 class="text-xl font-bold mb-2 text-gray-800">{{ $t('loading') }}</h3>
     </div>
   </div>
 </template>
@@ -63,6 +69,7 @@ import { createPost, editPost } from '@/services/userService'
 
 const route = useRoute()
 const postId = route.params.id
+const post = ref(null)
 const router = useRouter()
 const isCreate = computed(() => route.name === 'CreatePost')
 const title = ref('')
@@ -70,6 +77,7 @@ const content = ref('')
 const selectedCategories = ref([])
 const categories = ref([])
 const loading = ref(false)
+const submitting = ref(false)
 const error = ref(null)
 
 async function fetchCategories() {
@@ -81,24 +89,27 @@ async function fetchCategories() {
 }
 
 async function fetchPost() {
-  loading.value = true
-  try {
-    const post = getPost(postId)
-    title.value = post.title
-    content.value = post.content
-    selectedCategories.value = post.categories.map(title => {
-      const match = categories.value.find(c => c.title === title)
-      return match?.id
-    }).filter(Boolean)
-  } catch (error) {
-    console.error(error)
-  } finally {
-    loading.value = false
+  if (postId) {
+    loading.value = true
+
+    try {
+      post.value = await getPost(postId)
+      title.value = post.value.title
+      content.value = post.value.content
+      selectedCategories.value = post?.value.categories?.map(title => {
+        const match = categories.value.find(c => c.title === title)
+        return match?.id
+      }).filter(Boolean)
+    } catch (error) {
+      console.error(error)
+    } finally {
+      loading.value = false
+    }
   }
 }
 
 async function submit() {
-  loading.value = true
+  submitting.value = true
   let params = {
     title: title.value,
     content: content.value,
@@ -110,22 +121,19 @@ async function submit() {
       const response = await createPost(params)
       router.push({ name: 'EditPost', params: { id: response.id }})
     } else {
-      await editPost(params)
+      await editPost(postId, params)
     }
   } catch (e) {
     error.value = e.response?.data?.message
     console.error(e)
   } finally {
-    loading.value = false
+    submitting.value = false
   }
 }
 
 onMounted(async () => {
   await fetchCategories()
-
-  if (!isCreate.value) {
-    await fetchPost()
-  }
+  await fetchPost()
 })
 
 </script>

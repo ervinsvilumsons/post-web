@@ -2,7 +2,13 @@
     <div class="max-w-5xl mx-auto py-10 px-4">
       <FilterComponent @filter="handleFilter"/>
       <div v-if="!isIndexPage" class="p-4">
-        <router-link :to="{ name: 'CreatePost' }" class="bg-green-600 text-white px-4 py-2 rounded">{{ $t('create_post') }}</router-link>
+        <router-link 
+          id="createPost"
+          class="bg-green-600 text-white px-4 py-2 rounded"
+          :to="{ name: 'CreatePost' }"
+        >
+          {{ $t('create_post') }}
+        </router-link>
       </div>
       <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         <PostComponent class="bg-white p-6 rounded-xl shadow hover:shadow-lg transition"
