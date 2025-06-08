@@ -1,24 +1,21 @@
 # post-web
 
-## Dependencies
+### Dependencies
 [post-api](https://github.com/ervinsvilumsons/post-api)
 
-
-## Project setup
+### Project setup
 ```
 git clone https://github.com/ervinsvilumsons/post-web.git
 docker-compose up -d --build
 ```
 See [http://localhost:9002](http://localhost:9002)
 
-
-## Tests
+### Tests
 ```
 npx cypress open
 ```
 
-
-## Lints and fixes files
+### Lints and fixes files
 ```
 npm run lint
 ```
