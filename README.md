@@ -12,6 +12,7 @@ See [http://localhost:9002](http://localhost:9002)
 
 ### Tests
 ```
+npm run serve
 npx cypress open
 ```
 

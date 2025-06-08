@@ -50,6 +50,6 @@ Cypress.Commands.add('register', (name, email, password, password_confirmation) 
     cy.get('button[type="submit"]').click()
 })
 
-Cypress.Commands.add('logout', (name, email, password, password_confirmation) => {
+Cypress.Commands.add('logout', () => {
     cy.get('#logout').click()
 })
